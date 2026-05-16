@@ -1,0 +1,39 @@
+enabled_providers = [
+  "github_repositories",
+  "wayback",
+  "social_profiles",
+  "local_files",
+  "generic_http",
+  "breach_metadata",
+]
+
+[providers.local_files]
+paths = ["data"]
+
+[providers.social_profiles.platforms]
+github = "https://github.com/{username}"
+reddit = "https://www.reddit.com/user/{username}"
+x = "https://x.com/{username}"
+instagram = "https://www.instagram.com/{username}/"
+tiktok = "https://www.tiktok.com/@{username}"
+
+[[providers.generic_http.services]]
+name = "example_public_api"
+url = "https://api.example.com/search"
+params = { q = "{query}" }
+headers = { Authorization = "env:EXAMPLE_API_TOKEN" }
+json_path = "results"
+requires_lawful_use_ack = false
+metadata_only = true
+
+[providers.breach_metadata]
+# Configure a lawful metadata-only exposure API here.
+# Raw leaked passwords, tokens, cookies, and credential dumps are intentionally unsupported.
+api_url = "https://api.example.com/breach-metadata/{query}"
+api_key_env = "BREACH_METADATA_TOKEN"
+
+[ai]
+# Optional OpenAI-compatible chat completion endpoint for richer report analysis.
+openai_compatible_url = "https://api.openai.com/v1/chat/completions"
+api_key_env = "OPENAI_API_KEY"
+model = "gpt-4o-mini"
