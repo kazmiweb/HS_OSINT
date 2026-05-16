@@ -25,14 +25,14 @@ or credential dumps. Breach-related connectors are metadata-only.
 ## Quick start
 
 ```bash
-python -m hs_osint search "example.com" --format markdown
-python -m hs_osint search "@exampleuser" --provider social_profiles --format json
+python3 -m hs_osint search "example.com" --format markdown
+python3 -m hs_osint search "@exampleuser" --provider social_profiles --format json
 ```
 
 Install locally as a console script:
 
 ```bash
-python -m pip install -e .
+python3 -m pip install -e .
 hs-osint search "example.com"
 ```
 

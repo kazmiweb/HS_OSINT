@@ -104,13 +104,14 @@ class LocalFilesProvider(BaseProvider):
             ).fetchall()
             row_number = 0
             for (table_name,) in tables:
+                quoted_table = self._quote_identifier(table_name)
                 columns = [
                     item[1]
-                    for item in connection.execute(f"PRAGMA table_info({table_name})").fetchall()
+                    for item in connection.execute(f"PRAGMA table_info({quoted_table})").fetchall()
                 ]
                 if not columns:
                     continue
-                query = f"SELECT * FROM {table_name} LIMIT 5000"
+                query = f"SELECT * FROM {quoted_table} LIMIT 5000"
                 for row in connection.execute(query):
                     row_number += 1
                     yield row_number, {"table": table_name, **dict(zip(columns, row, strict=False))}
@@ -119,3 +120,7 @@ class LocalFilesProvider(BaseProvider):
     def _preview(row: Any) -> str:
         preview = json.dumps(row, sort_keys=True, default=str)
         return preview[:300] + ("..." if len(preview) > 300 else "")
+
+    @staticmethod
+    def _quote_identifier(identifier: str) -> str:
+        return '"' + identifier.replace('"', '""') + '"'
